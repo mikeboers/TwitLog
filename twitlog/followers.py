@@ -1,22 +1,15 @@
 import json
 
 from .cli import BaseCommand
-from .database import Database
 
 
 class FollowersCommand(BaseCommand):
 
-    def add_args(self):
+    def add_arguments(self):
         self.parser.add_argument('-x', '--no-relationships', action='store_true')
         self.parser.add_argument('-X', '--no-profiles', action='store_true')
 
     def main(self, args):
-
-        self.db = Database(args.username + '.sqlite')
-        self.db.create(if_not_exists=True)
-
-        self.oath = self.make_oath_session(args)
-
         if not args.no_relationships:
             self.update_relationships()
         if not args.no_profiles:

@@ -35,13 +35,13 @@ def create_user_tables(con):
 
 
 @patch
-def create_tweet_tables(con):
+def create_tweet_tables2(con):
     con.execute('''CREATE TABLE tweets (
         id INTEGER PRIMARY KEY NOT NULL,
         json TEXT,
-        last_analytics_id INTEGER REFERENCES tweet_analytics(id)
+        last_metrics_id INTEGER REFERENCES tweet_metrics(id)
     )''')
-    con.execute('''CREATE TABLE tweet_analytics (
+    con.execute('''CREATE TABLE tweet_metrics (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT (datetime('now')),
         tweet_id INTEGER NOT NULL REFERENCES tweets (id),
