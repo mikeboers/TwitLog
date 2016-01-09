@@ -21,10 +21,11 @@ class AnalyticsCommand(BaseCommand):
 
     def update_tweets(self):
         with self.db.connect() as con:
-
             params = {
                 'screen_name': self.args.username,
                 'trim_user': 'true', # We don't need full user objects
+                'count': '200',
+                'include_rts': 'false', # We don't want retweets
             }
             row = con.execute('SELECT max(id) FROM tweets').fetchone()
             if row:
