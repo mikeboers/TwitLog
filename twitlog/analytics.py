@@ -82,10 +82,11 @@ class AnalyticsCommand(BaseCommand):
             '''):
                 res = session.get('https://twitter.com/i/tfb/v1/tweet_activity/web/poll/%s' % tid)
                 new_metrics = {k: int(v) for k, v in res.json()['metrics']['all'].iteritems()}
-                print tid, new_metrics
-
+                new_metrics.pop('Engagements', None) # Just a total of the others.
                 new_json = json.dumps(new_metrics, sort_keys=True)
-                if old_json != new_json:
+                changed = new_json != old_json
+                print tid, new_json if changed else 'unchanged'
+                if changed:
                     mid = con.insert('tweet_metrics', {
                         'tweet_id': tid,
                         'json': new_json,
