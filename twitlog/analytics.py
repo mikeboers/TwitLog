@@ -76,6 +76,9 @@ class AnalyticsCommand(BaseCommand):
                 FROM tweets as tweet
                 LEFT JOIN tweet_metrics as last
                 ON tweet.last_metrics_id = last.id
+                WHERE tweet.last_metrics_id IS NULL OR
+                    last.created_at > datetime('now','-1 day')
+                ORDER BY tweet.id DESC
             '''):
                 res = session.get('https://twitter.com/i/tfb/v1/tweet_activity/web/poll/%s' % tid)
                 new_metrics = {k: int(v) for k, v in res.json()['metrics']['all'].iteritems()}
